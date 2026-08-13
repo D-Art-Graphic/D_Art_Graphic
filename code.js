@@ -159,7 +159,19 @@ function login(email, password) {
   try {
     if (!email || !password) return { success: false, message: 'Email and password required' };
 
-    const r = findRowByValue(SHEETS.USERS, U.EMAIL, email.trim().toLowerCase());
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const candidates = [normalizedEmail];
+    if (normalizedEmail === 'admin' || normalizedEmail === 'admin user' || normalizedEmail === 'admin-user') {
+      candidates.push('admin12@gmail.com');
+    }
+
+    let r = null;
+    for (const candidate of candidates) {
+      if (!candidate) continue;
+      r = findRowByValue(SHEETS.USERS, U.EMAIL, candidate);
+      if (r) break;
+    }
+
     if (!r) return { success: false, message: 'Invalid email or password' };
 
     const u = r.data;
@@ -3241,7 +3253,7 @@ function setupDemoData() {
   sh.appendRow([8, 'purchase_prefix', 'PUR', 1, now]);
   sh.appendRow([9, 'invoice_footer', 'Thank you for your business!', 1, now]);
 
-  /*// Activity_Logs
+  // Activity_Logs
   sh = ss.insertSheet(SHEETS.LOGS);
   sh.appendRow(['ID','User ID','Username','Action','Table','Record ID','Details','Created At']);
   sh.getRange(1, 1, 1, 8).setFontWeight('bold').setBackground('#001f3f').setFontColor('white');

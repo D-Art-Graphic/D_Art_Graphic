@@ -1243,8 +1243,8 @@ function ChartSkeleton() { return <div className="chart-card"><div className="sk
 function LoginPage({ onLogin }) {
   const [mode, setMode] = useState('login');           // login | forgot | reset
   const [direction, setDirection] = useState('forward'); // forward | back
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin');
+  const [password, setPassword] = useState('admin');
   const [showPwd, setShowPwd] = useState(false);
   const [otp, setOtp] = useState('');
   const [newPwd, setNewPwd] = useState('');
@@ -1361,8 +1361,8 @@ function LoginPage({ onLogin }) {
       <form onSubmit={handleLogin}>
         <div className="login-subtitle">Sign in to continue to your dashboard</div>
         <div className="form-group">
-          <label><i className="fas fa-envelope"></i> Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" autoComplete="username" required />
+          <label><i className="fas fa-user"></i> Username / Email</label>
+          <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin" autoComplete="username" required />
         </div>
         <div className="form-group">
           <label><i className="fas fa-lock"></i> Password</label>
@@ -1402,6 +1402,7 @@ function LoginPage({ onLogin }) {
 function App() {
   const SESSION_KEY = 'woodpos_session';
   const SESSION_HOURS = 24;
+  const INACTIVITY_TIMEOUT_MS = 10 * 60 * 1000;
 
   // instant restore from cache — no spinner
   const cached = React.useMemo(() => {
@@ -1431,7 +1432,36 @@ function App() {
     setCurrentUser(userData); setIsLoggedIn(true);
     localStorage.setItem(SESSION_KEY, JSON.stringify({ id: userData.id, user: userData, expires: Date.now() + (SESSION_HOURS * 60 * 60 * 1000) }));
   };
-  const handleLogout = () => { setIsLoggedIn(false); setCurrentUser(null); localStorage.removeItem(SESSION_KEY); swrClear(); };
+
+  const handleLogout = React.useCallback(() => {
+    setIsLoggedIn(false);
+    setCurrentUser(null);
+    localStorage.removeItem(SESSION_KEY);
+    swrClear();
+  }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    let timeoutId = null;
+    const resetTimer = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        handleLogout();
+      }, INACTIVITY_TIMEOUT_MS);
+    };
+
+    const activityEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'];
+    const onActivity = () => resetTimer();
+
+    activityEvents.forEach(event => window.addEventListener(event, onActivity, { passive: true }));
+    resetTimer();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      activityEvents.forEach(event => window.removeEventListener(event, onActivity));
+    };
+  }, [isLoggedIn, handleLogout]);
 
   return (
     <div>
