@@ -154,7 +154,7 @@ function deleteFromDrive(fileId) {
   try { if (fileId) DriveApp.getFileById(fileId).setTrashed(true); } catch(e) {}
 }
 
-// auth
+/*// auth
 function login(email, password) {
   try {
     if (!email || !password) return { success: false, message: 'Email and password required' };
@@ -179,7 +179,7 @@ function login(email, password) {
     if (password !== u[U.PWD]) return { success: false, message: 'Invalid email or password' };
 
     getSheet(SHEETS.USERS).getRange(r.row, U.UPDATED + 1).setValue(ts());
-    logActivity(u[U.ID], 'LOGIN', 'Users', u[U.ID], '');
+    /*logActivity(u[U.ID], 'LOGIN', 'Users', u[U.ID], '');
 
     return {
       success: true, message: 'Login successful',
@@ -187,7 +187,7 @@ function login(email, password) {
     };
   } catch (e) {
     console.error('login:', e);
-    return { success: false, message: 'Login failed' };
+    return { success: false, message: 'Login failed' };*/
   }
 }
 
@@ -3253,7 +3253,7 @@ function setupDemoData() {
   sh.appendRow([8, 'purchase_prefix', 'PUR', 1, now]);
   sh.appendRow([9, 'invoice_footer', 'Thank you for your business!', 1, now]);
 
-  // Activity_Logs
+  /*// Activity_Logs
   sh = ss.insertSheet(SHEETS.LOGS);
   sh.appendRow(['ID','User ID','Username','Action','Table','Record ID','Details','Created At']);
   sh.getRange(1, 1, 1, 8).setFontWeight('bold').setBackground('#001f3f').setFontColor('white');
