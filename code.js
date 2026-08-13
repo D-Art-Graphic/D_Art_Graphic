@@ -3241,7 +3241,7 @@ function setupDemoData() {
   sh.appendRow([8, 'purchase_prefix', 'PUR', 1, now]);
   sh.appendRow([9, 'invoice_footer', 'Thank you for your business!', 1, now]);
 
-  // Activity_Logs
+  /*// Activity_Logs
   sh = ss.insertSheet(SHEETS.LOGS);
   sh.appendRow(['ID','User ID','Username','Action','Table','Record ID','Details','Created At']);
   sh.getRange(1, 1, 1, 8).setFontWeight('bold').setBackground('#001f3f').setFontColor('white');
