@@ -85,7 +85,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 input, select, textarea { font-size: 16px !important; touch-action: manipulation; }
 
 /* login */
-.login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; background: var(--navy); position: relative; overflow: hidden; }
+/*.login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; background: var(--navy); position: relative; overflow: hidden; }
 .login-container::before { content: ''; position: absolute; top: -140px; right: -120px; width: 420px; height: 420px; border-radius: 50%; background: rgba(255,255,255,0.06); }
 .login-container::after { content: ''; position: absolute; bottom: -180px; left: -160px; width: 520px; height: 520px; border-radius: 50%; background: rgba(255,255,255,0.04); }
 .login-box { background: white; padding: 40px 38px 32px; border-radius: 18px; box-shadow: 0 20px 50px rgba(0,0,0,0.28), 0 4px 12px rgba(0,0,0,0.08); width: 100%; max-width: 420px; text-align: center; position: relative; z-index: 1; animation: login-in 0.5s ease-out; }
@@ -471,7 +471,7 @@ table.dataTable tbody tr:hover { background: #f9f9f9 !important; }
 .wa-btn:hover { background: #1da851; transform: scale(1.05); }
 .overdue-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 0; margin-bottom: 8px; border-bottom: 2px solid var(--navy-primary); display: flex; align-items: center; gap: 8px; }
 .recent-log-action { font-weight: 600; font-size: 13px; padding: 3px 8px; border-radius: 3px; }
-.log-login { background: #e8f5e9; color: #2e7d32; }
+/*.log-login { background: #e8f5e9; color: #2e7d32; }
 .log-create { background: #e3f2fd; color: #1565c0; }
 .log-update { background: #fff8e1; color: #f57f17; }
 .log-delete { background: #fce4ec; color: #c62828; }
@@ -1240,7 +1240,7 @@ function DashboardCardSkeleton() {
 function ChartSkeleton() { return <div className="chart-card"><div className="skeleton skeleton-chart"></div></div>; }
 
 /* ── Login ── */
-function LoginPage({ onLogin }) {
+/*function LoginPage({ onLogin }) {
   const [mode, setMode] = useState('login');           // login | forgot | reset
   const [direction, setDirection] = useState('forward'); // forward | back
   const [email, setEmail] = useState('admin');
@@ -1262,7 +1262,7 @@ function LoginPage({ onLogin }) {
       setLoading(false);
       if (r.success) onLogin(r.data);
       else setError(r.message);
-    } catch (err) { setLoading(false); setError('Connection error. Try again.'); }
+    } catch (err) { setLoading(false); setError('Connection error. Try again.'); }*/
   };
 
   const handleSendOtp = async (e) => {
@@ -1309,7 +1309,7 @@ function LoginPage({ onLogin }) {
 
   const renderPanel = () => {
     if (mode === 'forgot') return (
-      <form onSubmit={handleSendOtp}>
+      /*<form onSubmit={handleSendOtp}>
         <div className="login-info-pill"><i className="fas fa-key"></i> Reset Password</div>
         <div className="login-subtitle" style={{marginBottom:'22px'}}>Enter your email and we'll send a 6-digit code</div>
         <div className="form-group">
@@ -1428,10 +1428,10 @@ function App() {
     }).catch(() => {});
   }, []);
 
-  const handleLogin = (userData) => {
+  /*const handleLogin = (userData) => {
     setCurrentUser(userData); setIsLoggedIn(true);
     localStorage.setItem(SESSION_KEY, JSON.stringify({ id: userData.id, user: userData, expires: Date.now() + (SESSION_HOURS * 60 * 60 * 1000) }));
-  };
+  };*/
 
   const handleLogout = React.useCallback(() => {
     setIsLoggedIn(false);
@@ -1463,11 +1463,11 @@ function App() {
     };
   }, [isLoggedIn, handleLogout]);
 
-  return (
+  /*return (
     <div>
       {!isLoggedIn ? <LoginPage onLogin={handleLogin} /> : <DashboardLayout user={currentUser} onLogout={handleLogout} onUserUpdate={(d) => setCurrentUser(prev => ({...prev, ...d}))} />}
     </div>
-  );
+  );*/
 }
 
 /* ── DashboardLayout ── */
@@ -2398,7 +2398,7 @@ function LogsView({ user }) {
   const tableRef = useRef(null);
   const [filters, setFilters] = useState({ action:'', dateFrom:'', dateTo:'' });
 
-  const actionOptions = [{ value:'LOGIN', label:'Login' },{ value:'CREATE', label:'Create' },{ value:'UPDATE', label:'Update' },{ value:'DELETE', label:'Delete' },{ value:'CHANGE_PWD', label:'Password Change' },{ value:'TOGGLE_STATUS', label:'Toggle Status' }];
+  /*const actionOptions = [{ value:'LOGIN', label:'Login' },{ value:'CREATE', label:'Create' },{ value:'UPDATE', label:'Update' },{ value:'DELETE', label:'Delete' },{ value:'CHANGE_PWD', label:'Password Change' },{ value:'TOGGLE_STATUS', label:'Toggle Status' }];*/
 
   useEffect(() => { if (_c) setTimeout(() => initTable(_c), 150); loadLogs(); return () => { dtCleanup(); if (tableRef.current) { try { tableRef.current.destroy(); tableRef.current=null; } catch(e){} } }; }, []);
 
@@ -2421,7 +2421,7 @@ function LogsView({ user }) {
           columns:[
             { data:'id', title:'ID' },
             { data:'username', title:'User' },
-            { data:'action', title:'Action', render:(d) => { const c = d==='LOGIN'?'log-login':d==='CREATE'?'log-create':d==='UPDATE'||d==='CHANGE_PWD'||d==='TOGGLE_STATUS'?'log-update':d==='DELETE'?'log-delete':'log-default'; return '<span class="recent-log-action '+c+'">'+d+'</span>'; } },
+            /*{ data:'action', title:'Action', render:(d) => { const c = d==='LOGIN'?'log-login':d==='CREATE'?'log-create':d==='UPDATE'||d==='CHANGE_PWD'||d==='TOGGLE_STATUS'?'log-update':d==='DELETE'?'log-delete':'log-default'; return '<span class="recent-log-action '+c+'">'+d+'</span>'; } },*/
             { data:'table_name', title:'Table' },
             { data:'record_id', title:'Record ID' },
             { data:'details', title:'Details' },
@@ -6529,7 +6529,7 @@ function ReportsView({ user }) {
 }
 
 /* ── About ── */
-function AboutView() {
+/*function AboutView() {
   return (
     <div className="about-section">
       <div className="about-header">
